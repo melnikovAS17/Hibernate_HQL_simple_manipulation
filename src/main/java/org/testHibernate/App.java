@@ -19,6 +19,7 @@ public class App
     //---- Каскадирование в Hibernate не настроено, поэтому для правильной работы (в том числе хеширования hibernate)
     //---- будем устанавливать связи с оббеих сторон
     //---- на стороное БД каскадирование - on delete set null
+    //---- отношения бд - один к многоим
 {
     public static void main( String[] args ){
         Configuration configuration = new Configuration().addAnnotatedClass(Director.class)
