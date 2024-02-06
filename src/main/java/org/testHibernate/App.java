@@ -61,11 +61,12 @@ public class App
             Director director = session.get(Director.class,1);
 //            //----Устанавливаем связь в hibernate на стороне film путём установки в конструктор экз-р director
             Film film = new Film(director,"Super sus");
+             //----устанавливаем связь в hibernate на стороне director
+            director.getFilms().add(film);
 //            //---Сохраняем фильм  бд, иначе в output-е будет виден SQL, но у film объекта будет id = 0
 //            // ---- и об-та не будет в базе
             session.save(film);
-//            //----устанавливаем связь в hibernate на стороне director
-            director.getFilms().add(film);
+//         
             System.out.println(director.getFilms());
             session.getTransaction().commit();
         }
@@ -83,9 +84,10 @@ public class App
             // ---данный метод создаёт неизменяемую коллекцию, чтобы мы могли с ней далее взаи-ть мы помещаем
             //---этот метод в конструктор ArrayList<>(*)
            director.setFilms( new ArrayList<>(Collections.singletonList(film)));
+            film.setDirector(director);
            session.save(director);
            session.save(film);
-           film.setDirector(director);
+        
             System.out.println(film.getDirector());
 
             session.getTransaction().commit();
@@ -145,11 +147,12 @@ public class App
             Director director = session.get(Director.class,1);
 //            //----Устанавливаем связь в hibernate на стороне film путём установки в конструктор экз-р director
             Film film = new Film(director,"Super sus");
+              //----устанавливаем связь в hibernate на стороне director
+            director.getFilms().add(film);
 //            //---Сохраняем фильм  бд, иначе в output-е будет виден SQL, но у film объекта будет id = 0
 //            // ---- и об-та не будет в базе
             session.save(film);
-//            //----устанавливаем связь в hibernate на стороне director
-            director.getFilms().add(film);
+//          
             System.out.println(director.getFilms());
             session.getTransaction().commit();
         }
@@ -159,13 +162,12 @@ public class App
             Session session = sessionFactory.getCurrentSession()){
             Director director = session.get(Director.class, 3);
             Film film = session.get(Film.class,5);
-            //Удаляем фильм из списка по индексу(у данного режисёра есть фильм под индексом 5)
-            //Это SQL запрос
-            director.getFilms().remove(5);
+            //Удаляем фильм из списка по индексу(у данного режисёра есть фильм под индексом 5
+            director.getFilms().remove(film);
             //На стороне фильма устанавливаем режисёра в null
             //Это для правильного состояния Hibernate кеша - не SQL
+            //Данные методы создадут SQL запрос - "UPDATE "
             film.setDirector(null);
-
             //Далее проверка - для себя
             List<Film> films = director.getFilms();
             for(Film s: films){
